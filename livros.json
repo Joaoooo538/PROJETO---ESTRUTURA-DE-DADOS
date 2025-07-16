@@ -1,0 +1,14 @@
+{
+    "C1": {
+        "titulo": "ABC",
+        "autor": "Z\u00e9",
+        "codigo": "C1",
+        "emprestado": true
+    },
+    "CL14": {
+        "titulo": "A Volta Dos Que N\u00e3o Foram",
+        "autor": "Ernesto Trajano",
+        "codigo": "CL14",
+        "emprestado": false
+    }
+}
