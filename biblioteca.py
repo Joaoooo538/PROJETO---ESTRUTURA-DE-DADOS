@@ -1,19 +1,122 @@
 from livro import Livro
+
 from usuario import Usuario
+
 from emprestimo import Emprestimo
 
+from estruturas import NoArvore, ArvoreLivros, NoGenero
+
 class Biblioteca:
+    
     def __init__(self):
-        self.livros = []
-        self.usuarios = []
-        self.emprestimos = []
+        
+        self.generos = None
+        
+        self.livros_por_codigo = {}
+        
+        self.generos_padrao = [
+            "Aventura", "Romance", "Ficção Científica", "Terror", "Drama",
+            "Comédia", "Fantasia", "Suspense", "Biografia", "História"
+        ]
+        
+        for genero in self.generos_padrao:
+            
+            self._adicionar_genero(genero)
+
+    def _adicionar_genero(self, genero):
+        
+        novo_genero = NoGenero(genero)
+        
+        if self.generos is None:
+            
+            self.generos = novo_genero
+            
+        else:
+            
+            atual = self.generos
+            
+            while atual.proximo is not None:
+                
+                atual = atual.proximo
+                
+            atual.proximo = novo_genero
 
     def cadastrar_livro(self):
+        
+        print("Selecione o gênero do livro:")
+        
+        generos_lista = []
+        
+        atual = self.generos
+        
+        i = 1
+        
+        while atual is not None:
+            
+            print(f"{i}. {atual.genero}")
+            
+            generos_lista.append(atual.genero)
+            
+            atual = atual.proximo
+            
+            i += 1
+            
+        print(f"{i}. Outro (Cadastrar novo gênero)")
+
+        try:
+            escolha = int(input("Digite o número correspondente: "))
+            
+        except ValueError:
+            
+            print("Entrada inválida.")
+            
+            return
+
+        if escolha < 1 or escolha > len(generos_lista) + 1:
+            
+            print("Opção inválida.")
+            
+            return
+
+        if escolha == len(generos_lista) + 1:
+            
+            genero = input("Digite o novo gênero: ")
+            
+            self._adicionar_genero(genero)
+            
+        else:
+            
+            genero = generos_lista[escolha - 1]
+
         titulo = input("Título: ")
         autor = input("Autor: ")
         codigo = input("Código: ")
-        self.livros.append(Livro(titulo, autor, codigo))
-        print("Livro cadastrado com sucesso.")
+
+        if codigo in self.livros_por_codigo:
+            
+            print("Já existe um livro com esse código.")
+            
+            return
+
+        novo_livro = Livro(titulo, autor, codigo, genero)
+        
+        self.livros_por_codigo[codigo] = novo_livro
+
+        atual = self.generos
+        
+        while atual is not None:
+            
+            if atual.genero == genero:
+                
+                atual.arvore.inserir(novo_livro)
+                
+                print("Livro cadastrado com sucesso.")
+                
+                return
+            
+            atual = atual.proximo
+
+
 
     def cadastrar_usuario(self):
         nome = input("Nome do usuário: ")
