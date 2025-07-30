@@ -7,11 +7,10 @@ import datetime  # Importação adicionada
 
 class Biblioteca:
     def __init__(self):
-        self.generos = None  # Lista encadeada de NoGenero
-        self.livros_por_codigo = {}  # Dicionário para acesso rápido por código
-        self.usuarios = []  # Lista de objetos Usuario (CORREÇÃO: inicializada aqui)
-        self.emprestimos = []  # Lista de objetos Emprestimo (CORREÇÃO: inicializada aqui)
-
+        self.generos = None  
+        self.livros_por_codigo = {} 
+        self.usuarios = []  
+        self.emprestimos = []  
         self.generos_padrao = [
             "Aventura", "Romance", "Ficção Científica", "Terror", "Drama",
             "Comédia", "Fantasia", "Suspense", "Biografia", "História"
@@ -65,7 +64,6 @@ class Biblioteca:
 
         if codigo in self.livros_por_codigo:
             print("Já existe um livro com esse código. Adicionando uma nova cópia.")
-            # Se o livro já existe, apenas aumenta a quantidade disponível
             self.livros_por_codigo[codigo].quantidade_total += 1
             self.livros_por_codigo[codigo].quantidade_disponivel += 1
             print(
@@ -83,8 +81,6 @@ class Biblioteca:
 
         novo_livro = Livro(titulo, autor, codigo, genero_escolhido, quantidade)
         self.livros_por_codigo[codigo] = novo_livro
-
-        # Adiciona o livro à árvore do gênero correspondente
         atual = self.generos
         while atual is not None:
             if atual.genero == genero_escolhido:
@@ -96,7 +92,6 @@ class Biblioteca:
     def cadastrar_usuario(self):
         nome = input("Nome do usuário: ")
         user_id = input("ID do usuário: ")
-        # Verifica se o ID do usuário já existe
         if any(u.user_id == user_id for u in self.usuarios):
             print("Já existe um usuário com esse ID.")
             return
@@ -126,12 +121,12 @@ class Biblioteca:
             print("Usuário não encontrado.")
             return
 
-        # Realiza o empréstimo
+       
         livro.quantidade_disponivel -= 1
         if livro.quantidade_disponivel < livro.quantidade_total:
-            livro.emprestado = True  # Marca como emprestado se houver alguma cópia fora
+            livro.emprestado = True 
 
-        # Adiciona ao histórico do livro
+       
         livro.historico_emprestimos.append({"user_id": user_id, "data_emprestimo": datetime.date.today().isoformat()})
 
         novo_emprestimo = Emprestimo(livro, usuario_encontrado)
@@ -140,14 +135,14 @@ class Biblioteca:
 
     def devolver_livro(self):
         codigo = input("Código do livro: ")
-        user_id = input("ID do usuário que devolve: ")  # Pede o ID do usuário para melhor controle
+        user_id = input("ID do usuário que devolve: ")  
 
         livro = self.livros_por_codigo.get(codigo)
         if not livro:
             print("Livro não encontrado.")
             return
 
-        # Verifica se o livro foi realmente emprestado para este usuário
+      
         emprestimo_encontrado = None
         for emp in self.emprestimos:
             if emp.livro.codigo == codigo and emp.usuario.user_id == user_id:
@@ -160,7 +155,7 @@ class Biblioteca:
 
         livro.quantidade_disponivel += 1
         if livro.quantidade_disponivel == livro.quantidade_total:
-            livro.emprestado = False  # Marca como não emprestado se todas as cópias voltaram
+            livro.emprestado = False  
 
         self.emprestimos.remove(emprestimo_encontrado)
         print(f"Livro '{livro.titulo}' devolvido por '{user_id}' com sucesso.")
@@ -171,11 +166,11 @@ class Biblioteca:
 
         atual_genero = self.generos
         while atual_genero:
-            # Função auxiliar para buscar na árvore de um gênero
+           
             def _buscar_na_arvore(no):
                 if not no:
                     return
-                # Percurso in-order para manter a ordem alfabética ao listar
+              
                 _buscar_na_arvore(no.esquerda)
                 livro = no.livro
                 if termo in livro.titulo.lower() or termo in livro.autor.lower():
@@ -194,7 +189,6 @@ class Biblioteca:
                 print(f"  Cópias disponíveis: {l.quantidade_disponivel}/{l.quantidade_total}")
                 if l.historico_emprestimos:
                     print("  Histórico de Empréstimos (últimos):")
-                    # Mostra os 3 últimos empréstimos para não lotar a tela
                     for hist in l.historico_emprestimos[-3:]:
                         print(f"    - Usuário ID: {hist['user_id']} em {hist['data_emprestimo']}")
                 print("-" * 30)
@@ -224,7 +218,6 @@ class Biblioteca:
             if atual_genero.arvore.raiz is None:
                 print("  Nenhum livro neste gênero.")
             else:
-                # Percurso in-order na árvore para listar em ordem alfabética por título
                 def _percorrer_arvore(no):
                     if no is not None:
                         _percorrer_arvore(no.esquerda)
@@ -234,7 +227,7 @@ class Biblioteca:
                         print(f"    Status: {status} | Cópias: {livro.quantidade_disponivel}/{livro.quantidade_total}")
                         if livro.historico_emprestimos:
                             print("    Histórico de Empréstimos (últimos):")
-                            for hist in livro.historico_emprestimos[-2:]:  # Mostra os 2 últimos
+                            for hist in livro.historico_emprestimos[-2:]:  
                                 print(f"      - Usuário ID: {hist['user_id']} em {hist['data_emprestimo']}")
                         _percorrer_arvore(no.direita)
 

@@ -1,10 +1,7 @@
 import os
-import pickle  # Importado diretamente aqui, pois é usado no main
-
+import pickle 
 from biblioteca import Biblioteca
 from utils import menu_principal
-
-# Define o nome do arquivo onde os dados da biblioteca serão salvos
 ARQUIVO_DADOS = 'dados_biblioteca.pkl'
 
 
@@ -15,8 +12,6 @@ def limpar_tela():
 
 def main():
     biblioteca = None
-
-    # Tenta carregar os dados da biblioteca ao iniciar
     if os.path.exists(ARQUIVO_DADOS):
         try:
             with open(ARQUIVO_DADOS, 'rb') as f:
@@ -30,7 +25,6 @@ def main():
         biblioteca = Biblioteca()
 
     while True:
-        # Limpa a tela antes de exibir o menu ou qualquer output da ação
         limpar_tela()
 
         opcao = menu_principal()
@@ -52,7 +46,7 @@ def main():
             biblioteca.visualizar_usuarios()
         elif opcao == "0":
             print("Encerrando o sistema...")
-            # Salva os dados da biblioteca antes de sair
+          
             try:
                 with open(ARQUIVO_DADOS, 'wb') as f:
                     pickle.dump(biblioteca, f)
@@ -63,8 +57,9 @@ def main():
         else:
             print("Opção inválida.")
 
-        # Pausa para o usuário ver a mensagem antes da tela ser limpa novamente
-        if opcao != "0":  # Não precisa pausar se for sair
+       
+        if opcao != "0": 
+            
             input("\nPressione Enter para continuar...")
 
 
