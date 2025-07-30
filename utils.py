@@ -6,7 +6,7 @@ def menu_principal():
     print("4. Devolver Livro")
     print("5. Buscar Livro")
     print("6. Relatório de Empréstimos")
-    print("7. Visualizar Todos os Livros") # Nova opção
-    print("8. Visualizar Todos os Usuários") # Nova opção
+    print("7. Visualizar Todos os Livros")
+    print("8. Visualizar Todos os Usuários") 
     print("0. Sair")
     return input("Escolha uma opção: ")

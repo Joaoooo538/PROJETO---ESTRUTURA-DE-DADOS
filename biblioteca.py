@@ -2,8 +2,7 @@ from livro import Livro
 from usuario import Usuario
 from emprestimo import Emprestimo
 from estruturas import NoArvore, ArvoreLivros, NoGenero
-import datetime  # Importação adicionada
-
+import datetime
 
 class Biblioteca:
     def __init__(self):
